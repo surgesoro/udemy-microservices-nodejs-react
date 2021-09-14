@@ -13,7 +13,7 @@ export default ({ postId }) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, []); // the [] empty array tells out function to only fetch posts once, during initial component load
 
   const renderedComments = comments.map((comment) => {
     return <li key={comment.id}>{comment.content}</li>;
