@@ -23,7 +23,7 @@ app.post("/posts", async (req, res) => {
     title,
   };
 
-  await axios.post("http://localhost:8085/events", {
+  await axios.post("http://event-bus-srv:8085/events", {
     type: "PostCreated",
     data: {
       id,
@@ -41,6 +41,7 @@ app.post("/events", (req, res) => {
 });
 
 let appServer = app.listen(8080, () => {
+  console.log("k8s wired");
   console.log("Listening on port 8080");
 });
 

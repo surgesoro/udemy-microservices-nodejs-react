@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+
+#&dockerHubId: surgesoro/msn-event-bus:latest
+
+metadata:
+  name: event-bus-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-bus
+  template:
+    metadata:
+      labels:
+        app: event-bus
+    spec:
+      containers:
+        - name: event-bus
+          image: surgesoro/msn-event-bus:latest
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-bus-srv
+spec:
+  type: ClusterIP #this is optional, if not specified k8s will create ClusterIP by default
+  selector:
+    app: event-bus
+  ports:
+    - name: event-bus
+      protocol: TCP
+      port: 8085
+      targetPort: 8085

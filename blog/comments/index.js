@@ -22,7 +22,7 @@ app.post("/posts/:id/comments", async (req, res) => {
   comments.push({ id: commentId, content, status: "pending" }); //refactor later, status should be a separate constant
   commentsByPostId[req.params.id] = comments;
 
-  await axios.post("http://localhost:8085/events", {
+  await axios.post("http://event-bus-srv:8085/events", {
     type: "CommentCreated",
     data: {
       id: commentId,
@@ -48,7 +48,7 @@ app.post("/events", async (req, res) => {
     });
     comment.status = status;
 
-    await axios.post("http://localhost:8085/events", {
+    await axios.post("http://event-bus-srv:8085/events", {
       type: "CommentUpdated",
       data: {
         id,
@@ -63,6 +63,7 @@ app.post("/events", async (req, res) => {
 });
 
 let appServer = app.listen(8081, () => {
+  console.log("k8s wired");
   console.log("Listening on port 8081");
 });
 
