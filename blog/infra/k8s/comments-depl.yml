@@ -17,7 +17,6 @@ spec:
       containers:
         - name: comments
           image: surgesoro/msn-comments:latest
-          imagePullPolicy: Always
 ---
 apiVersion: v1
 kind: Service

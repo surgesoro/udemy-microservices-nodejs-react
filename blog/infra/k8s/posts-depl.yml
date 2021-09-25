@@ -17,7 +17,6 @@ spec:
       containers:
         - name: posts
           image: surgesoro/msn-posts:latest
-          imagePullPolicy: Always
 ---
 apiVersion: v1
 kind: Service

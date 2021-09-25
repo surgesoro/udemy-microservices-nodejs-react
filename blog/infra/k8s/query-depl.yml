@@ -17,7 +17,6 @@ spec:
       containers:
         - name: query
           image: surgesoro/msn-query:latest
-          imagePullPolicy: Always
 ---
 apiVersion: v1
 kind: Service

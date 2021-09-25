@@ -18,7 +18,6 @@ spec:
       containers:
         - name: event-bus
           image: surgesoro/msn-event-bus:latest
-          imagePullPolicy: Always
 ---
 apiVersion: v1
 kind: Service

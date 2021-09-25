@@ -17,7 +17,6 @@ spec:
       containers:
         - name: moderation
           image: surgesoro/msn-moderation:latest
-          imagePullPolicy: Always
 ---
 apiVersion: v1
 kind: Service

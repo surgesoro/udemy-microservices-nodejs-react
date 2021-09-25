@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+
+#&dockerHubId: surgesoro
+metadata:
+  name: blog-app-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blog-app
+  template:
+    metadata:
+      labels:
+        app: blog-app
+    spec:
+      containers:
+        - name: blog-app
+          image: surgesoro/msn-blog-app:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blog-app-srv
+spec:
+  type: ClusterIP #this is optional, if not specified k8s will create ClusterIP by default
+  selector:
+    app: blog-app
+  ports:
+    - name: blog-app
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
