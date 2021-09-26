@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+
+#&dockerHubId: surgesoro
+metadata:
+  name: moderation-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: moderation
+  template:
+    metadata:
+      labels:
+        app: moderation
+    spec:
+      containers:
+        - name: moderation
+          image: surgesoro/msn-moderation:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moderation-srv
+spec:
+  type: ClusterIP #this is optional, if not specified k8s will create ClusterIP by default
+  selector:
+    app: moderation
+  ports:
+    - name: moderation
+      protocol: TCP
+      port: 8083
+      targetPort: 8083

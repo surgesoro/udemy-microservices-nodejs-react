@@ -22,7 +22,7 @@ app.post("/posts/:id/comments", async (req, res) => {
   comments.push({ id: commentId, content, status: "pending" }); //refactor later, status should be a separate constant
   commentsByPostId[req.params.id] = comments;
 
-  await axios.post("http://localhost:8085/events", {
+  await axios.post("http://event-bus-srv:8085/events", {
     type: "CommentCreated",
     data: {
       id: commentId,
@@ -48,7 +48,7 @@ app.post("/events", async (req, res) => {
     });
     comment.status = status;
 
-    await axios.post("http://localhost:8085/events", {
+    await axios.post("http://event-bus-srv:8085/events", {
       type: "CommentUpdated",
       data: {
         id,
@@ -62,6 +62,40 @@ app.post("/events", async (req, res) => {
   res.send({});
 });
 
-app.listen(8081, () => {
+let appServer = app.listen(8081, () => {
+  console.log("k8s wired");
   console.log("Listening on port 8081");
 });
+
+//-------------------------------
+//Graceful Shutdown Node Specific
+// quit on ctrl-c when running docker in terminal
+process.on("SIGINT", function onSigint() {
+  console.info(
+    "Got SIGINT (aka ctrl-c in docker). Graceful shutdown ",
+    new Date().toISOString()
+  );
+  shutdown();
+});
+
+// quit properly on docker stop
+process.on("SIGTERM", function onSigterm() {
+  console.info(
+    "Got SIGTERM (docker container stop). Graceful shutdown ",
+    new Date().toISOString()
+  );
+  shutdown();
+});
+
+// shut down server
+function shutdown() {
+  // NOTE: server.close is for express based apps
+  // If using hapi, use `server.stop`
+  appServer.close(function onServerClosed(err) {
+    if (err) {
+      console.error(err);
+      process.exitCode = 1;
+    }
+    process.exit();
+  });
+}

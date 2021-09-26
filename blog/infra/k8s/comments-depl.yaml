@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+
+#&dockerHubId: surgesoro
+metadata:
+  name: comments-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: comments
+  template:
+    metadata:
+      labels:
+        app: comments
+    spec:
+      containers:
+        - name: comments
+          image: surgesoro/msn-comments:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: comments-srv
+spec:
+  type: ClusterIP #this is optional, if not specified k8s will create ClusterIP by default
+  selector:
+    app: comments
+  ports:
+    - name: comments
+      protocol: TCP
+      port: 8081
+      targetPort: 8081

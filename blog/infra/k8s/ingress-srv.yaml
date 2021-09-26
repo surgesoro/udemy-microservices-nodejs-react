@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-srv
+  annotations:
+    #this annotation is important b/c it will tell ingress controller that there are some ingress rules to be considered
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  rules:
+    - host: posts.com
+      http:
+        paths:
+          #route for Posts App Service
+          - path: /posts/create
+            pathType: Prefix
+            backend:
+              service:
+                name: posts-srv
+                port:
+                  number: 8080
+          #route for Query App Service (maybe refactor to /posts/query or /posts/get)
+          - path: /posts
+            pathType: Prefix
+            backend:
+              service:
+                name: query-srv
+                port:
+                  number: 8082
+          #route for Comments
+          - path: /posts/?(.*)/comments
+            pathType: Prefix
+            backend:
+              service:
+                name: comments-srv
+                port:
+                  number: 8081
+          - path: /?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: blog-app-srv
+                port:
+                  number: 3000
