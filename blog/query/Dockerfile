@@ -6,4 +6,4 @@ RUN npm install && npm cache clean --force
 
 COPY ./ ./
 
-CMD ["node", "index.js"]
+CMD ["npm", "start"]
