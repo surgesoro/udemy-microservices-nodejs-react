@@ -45,6 +45,7 @@ app.post("/events", (req, res) => {
 
 let appServer = app.listen(8082, async () => {
   console.log("k8s wired");
+  console.log("TEST");
   console.log("Listening on 8082");
   try {
     const res = await axios.get("http://event-bus-srv:8085/events");
