@@ -1,7 +1,5 @@
 # udemy-microservices-nodejs-react
 
-<<<<<<< Phase3.3
-
 ## React App "Blog"
 
 msn - abbreviation for microservices + node
