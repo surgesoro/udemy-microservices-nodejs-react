@@ -1,0 +1,18 @@
+apiVersion: skaffold/v2beta23
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/* #tell skaffold to execute all files in the k8s directory
+build:
+  local:
+    push: false
+  artifacts:
+    - image: surgesoro/msn-auth #tell skaffold that there is an image associated with this artifact
+      context: auth #tell skaffold where to look for the Dockerfile and other files for manual redeploy
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts" #tell skaffold to monitor all "*.ts" files for change in subdirectories of "src" directory
+            dest: . #tell skaffold how to sync, in this case take source changed files and throw it in container's corresponding directory
