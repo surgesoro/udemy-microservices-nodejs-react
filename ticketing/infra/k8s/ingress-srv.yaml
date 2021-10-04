@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-srv
+  annotations:
+    kubernetes.io/ingress.class: nginx #this annotation is important b/c it will tell ingress controller that there are some ingress rules to be considered
+    nginx.ingress.kubernetes.io/use-regex: "true" #tells nginx that some of our paths will have regular expressions in them
+spec:
+  rules:
+    - host: ticketing.dev
+      http:
+        paths:
+          - path: /api/users/?(.) #this rule tells ingress to use this incoming path, i.e. anything that starts with /api/users/
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-srv #and forward it to this k8s service
+                port:
+                  number: 3000
