@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: auth #tell k8s how to name container
-          image: surgesoro/msn-auth:latest #tell k8s what image to use for this/these container(s)
+          image: us.gcr.io/msnticketing/msn-auth #tell k8s what image to use for this/these container(s)
 ---
 apiVersion: v1
 kind: Service

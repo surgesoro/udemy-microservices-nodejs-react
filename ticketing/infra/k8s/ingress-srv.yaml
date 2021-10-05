@@ -7,10 +7,10 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: "true" #tells nginx that some of our paths will have regular expressions in them
 spec:
   rules:
-    - host: ticketing.dev
+    - host: gcpticketing.dev
       http:
         paths:
-          - path: /api/users/?(.) #this rule tells ingress to use this incoming path, i.e. anything that starts with /api/users/
+          - path: /api/users/?(.*) #this rule tells ingress to use this incoming path, i.e. anything that starts with /api/users/
             pathType: Prefix
             backend:
               service:
