@@ -16,5 +16,8 @@ Prerequisites:
 
 ## Repo Structure
 
-- ./blog - simple blog app, that allows anyone to create posts and comments; Includes: Node, Express, Docker, wired for K8s, simple custom Event Bus for messaging; Does not include: DB and robust Event Bus
-- ./ticketing - TBD
+- ./blog - Simple blog app, that allows anyone to create posts and comments; INCLUDES: React, Node, Express, Docker, wired for K8s, simple custom build simple Event Bus for messaging; EXCLUDES: DB and robust Event Bus; ENVIRONMENT: Local machine run
+- ./ticketing-gcp - Simple ticketing app, that allows users to singup/login, purchase tickets. During checkout tickets are timer controlled on hold to prevent other users from purchasing the same ticket; INCLUDES: React, TypeScript, Node, Express, Docker, wired for K8s + MORE; EXCLUDES: TBD; ENVIRONMENT: GCP
+- ./ticketing-az - TBD to work with Azure
+- ./ticketing-aws - TBD to work with AWS
+- ./ticketing - TBD to work in local dev
