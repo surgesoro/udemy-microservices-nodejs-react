@@ -16,7 +16,7 @@ router.post(
       .isLength({ min: 4, max: 20 })
       .withMessage("Password must be between 4 and 20 characters"),
   ],
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     //annotating req and res with types Request and Response
     const errors = validationResult(req);
 
@@ -32,7 +32,7 @@ router.post(
     throw new Error("Error connecting to database");
     */
 
-    //TS way - we want an object like and 'Error', but we want to add in some more custom properties to it.
+    //TS way - we want an object like an 'Error', but we want to add in some more custom properties to it.
     //Usually a sign you want to subclass something!
     if (!errors.isEmpty()) {
       throw new RequestValidationError(errors.array());
