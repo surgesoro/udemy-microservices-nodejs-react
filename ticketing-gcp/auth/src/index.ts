@@ -1,6 +1,7 @@
 import express from "express";
 import "express-async-errors";
 import mongoose from "mongoose";
+import cookieSession from "cookie-session";
 
 import { currentUserRouter } from "./routes/current-user";
 import { signinRouter } from "./routes/signin";
@@ -11,7 +12,18 @@ import { NotFoundError } from "./errors/not-found-error";
 import { getEffectiveTypeParameterDeclarations } from "typescript";
 
 const app = express();
+app.set("trust proxy", true); //traffic is being proxied to our app through ingress-nginx
+//by default express will not trust proxy
+//adding this to make sure that express is aware that it is behind a proxy
+//and to trust traffic to being secure even though it is coming through proxy
 app.use(express.json());
+app.use(
+  cookieSession({
+    signed: false,
+    secure: true,
+  })
+);
+
 app.use(currentUserRouter);
 app.use(signinRouter);
 app.use(signoutRouter);
@@ -25,6 +37,10 @@ app.all("*", async (req, res) => {
 app.use(errorHandler);
 
 const start = async () => {
+  if (!process.env.JWT_KEY) {
+    throw new Error("JWT_KEY must be defined");
+  }
+
   try {
     await mongoose.connect("mongodb://auth-mongo-srv:27017/auth");
     console.log("Connected to MongoDB");

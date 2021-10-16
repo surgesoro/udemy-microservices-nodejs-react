@@ -1,9 +1,11 @@
 import express, { Request, Response } from "express";
-import { body, validationResult } from "express-validator"; //there are multiple ways to use express-validator module,
+import { body } from "express-validator"; //there are multiple ways to use express-validator module,
 //this one is explicitly validate the {body} of the response
 //and {validatorResults}
+import jwt from "jsonwebtoken";
+
+import { validateRequest } from "../middlewares/validate-request";
 import { User } from "../models/user";
-import { RequestValidationError } from "../errors/request-validation-error";
 import { BadRequestError } from "../errors/bad-request-error";
 
 const router = express.Router(); //different from const app = express();
@@ -17,28 +19,8 @@ router.post(
       .isLength({ min: 4, max: 20 })
       .withMessage("Password must be between 4 and 20 characters"),
   ],
+  validateRequest,
   async (req: Request, res: Response) => {
-    //annotating req and res with types Request and Response
-    const errors = validationResult(req);
-
-    //plain JS
-    /*
-    if (!errors.isEmpty()) {
-      const error =  new Error("Invalid email or password");
-      error.reasons = error.array();
-      throw error;
-    }
-
-    console.log("Creating a user...");
-    throw new Error("Error connecting to database");
-  */
-
-    //TS way - we want an object like an 'Error', but we want to add in some more custom properties to it.
-    //Usually a sign you want to subclass something!
-    if (!errors.isEmpty()) {
-      throw new RequestValidationError(errors.array());
-    }
-
     const { email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
@@ -49,6 +31,26 @@ router.post(
 
     const user = User.build({ email, password });
     await user.save();
+
+    //Generate JWT
+    // if (!process.env.JWT_KEY){
+    //   throw new Error("lkjsflkdjf")
+    // }//trick on how to make TS think that JWT_KEY is not undefined,
+    //hence has to be string, but this is not the best place for this check. Moved to index.ts
+    const userJwt = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+      },
+      process.env.JWT_KEY! //the "!" mark makes TS to trust that user checked and would like to proceed without knowing the type
+    );
+
+    //Store it on session object
+    //req.session.jwt = userJwt;//does not work with TS
+    req.session = {
+      jwt: userJwt,
+    };
+
     res.status(201).send(user);
   }
 );
