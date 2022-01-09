@@ -5,12 +5,12 @@ deploy:
     manifests:
       - ./infra/k8s/* #tell skaffold to execute all files in the k8s directory
 build:
-  # local:
+  # local: #for local development
   #   push: false
   googleCloudBuild: #for GCP Cloud Build
-    projectId: msnticketing #for GCP Cloud Build
+    projectId: msnticketing-dev1 #for GCP Cloud Build
   artifacts:
-    - image: us.gcr.io/msnticketing/msn-auth #for GCP Cloud Build image labeling
+    - image: us.gcr.io/msnticketing-dev1/msn-auth #for GCP Cloud Build image labeling
       #- image: surgesoro/msn-auth #tell skaffold that there is an image associated with this artifact (for local development)
       context: auth #tell skaffold where to look for the Dockerfile and other files for manual redeploy
       docker:
