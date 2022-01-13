@@ -19,3 +19,11 @@ build:
         manual:
           - src: "src/***/*.ts" #tell skaffold to monitor all "*.ts" files for change in subdirectories of "src" directory
             dest: . #tell skaffold how to sync, in this case take source changed files and throw it in container's corresponding directory
+    - image: us.gcr.io/msnticketing-dev1/msn-client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "**/*.js"
+            dest: .
