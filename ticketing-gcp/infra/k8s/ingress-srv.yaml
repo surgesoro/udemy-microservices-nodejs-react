@@ -22,5 +22,5 @@ spec:
             backend:
               service:
                 name: client-srv #and forward it to this k8s service
-                  port:
+                port:
                   number: 3000
