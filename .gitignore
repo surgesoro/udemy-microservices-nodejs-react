@@ -5,6 +5,7 @@ node_modules
 .next
 .pnp
 .pnp.js
+common
 
 # testing
 /coverage
