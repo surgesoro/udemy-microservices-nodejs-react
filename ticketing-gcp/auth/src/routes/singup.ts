@@ -3,10 +3,9 @@ import { body } from "express-validator"; //there are multiple ways to use expre
 //this one is explicitly validate the {body} of the response
 //and {validatorResults}
 import jwt from "jsonwebtoken";
+import { validateRequest, BadRequestError } from "@gcpticketing/common";
 
-import { validateRequest } from "../middlewares/validate-request";
 import { User } from "../models/user";
-import { BadRequestError } from "../errors/bad-request-error";
 
 const router = express.Router(); //different from const app = express();
 router.post(

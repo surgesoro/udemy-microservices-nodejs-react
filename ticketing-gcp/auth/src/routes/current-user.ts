@@ -1,6 +1,6 @@
 import express from "express";
 
-import { currentUser } from "../middlewares/current-user";
+import { currentUser } from "@gcpticketing/common";
 
 const router = express.Router(); //different from const app = express();
 router.get("/api/users/currentuser", currentUser, (req, res) => {
