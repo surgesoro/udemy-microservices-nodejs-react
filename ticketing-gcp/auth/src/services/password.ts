@@ -7,7 +7,7 @@ const scryptAsync = promisify(scrypt);
 
 export class Password {
   //reminder static methods allows us to access methods of the given class
-  //without creating creating an instance of that class
+  //without creating an instance of that class
   static async toHash(password: string) {
     const salt = randomBytes(8).toString("hex");
     const buf = (await scryptAsync(password, salt, 64)) as Buffer;

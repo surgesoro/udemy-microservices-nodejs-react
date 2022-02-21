@@ -20,6 +20,8 @@ spec:
         - name: auth #tell k8s how to name container
           image: us.gcr.io/msnticketing-dev1/msn-auth #tell k8s what image to use for this/these container(s)
           env:
+            - name: MONGO_URI
+              value: "mongodb://auth-mongo-srv:27017/auth"
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:

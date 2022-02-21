@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tickets-depl
+  labels:
+    app: tickets
+    tier: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tickets #tell k8s what pods the deployment to apply to
+  template:
+    metadata:
+      labels:
+        app: tickets #pod label
+        tier: backend
+    spec:
+      containers:
+        - name: tickets #tell k8s how to name container
+          image: us.gcr.io/msnticketing-dev1/msn-tickets #tell k8s what image to use for this/these container(s)
+          env:
+            - name: MONGO_URI
+              value: "mongodb://tickets-mongo-srv:27017/tickets"
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tickets-srv
+spec:
+  #type: ClusterIP - since type: is not defined (commented out), k8s will auto set to "type: ClusterIP", which is only for intra-cluster communication
+  selector:
+    app: tickets #tell k8s to apply this service to all the pods with the label {app: auth}
+  ports:
+    - name: tickets #tell k8s how to name this port
+      protocol: TCP
+      port: 3000 #port for incoming traffic for this service
+      targetPort: 3000 #port of the container i.e. container(targetPort) defined in auth/src/index.js

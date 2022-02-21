@@ -17,6 +17,13 @@ spec:
                 name: auth-srv #and forward it to this k8s service
                 port:
                   number: 3000
+          - path: /api/tickets/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: tickets-srv
+                port:
+                  number: 3000
           - path: /?(.*) #path are executed in order since it is an array of paths, hence /api/users/?(.*) will be matched first, then this one
             pathType: Prefix
             backend:
